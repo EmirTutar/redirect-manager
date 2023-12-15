@@ -15,7 +15,7 @@ pids
 *.pid.lock
 
 # Ignore environment variables file
-.env
+#.env
 
 # Ignore dependency directories
 # You might want to uncomment these lines if you are using Yarn
