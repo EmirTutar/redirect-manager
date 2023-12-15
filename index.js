@@ -7,10 +7,8 @@ const port = 3000;
 
 app.use(express.json());
 
-// Beispiel-Datenstruktur
-let entries = {
-  "example-slug": "https://rwu.de",
-};
+// Lese die Slugs aus der JSON-Datei beim Start des Servers
+let entries = loadSlugs();
 
 // Middleware für die Authentifizierung
 const authenticate = (req, res, next) => {
@@ -28,9 +26,10 @@ const authenticate = (req, res, next) => {
 // GET /:slug
 app.get('/:slug', (req, res) => {
   const slug = req.params.slug;
-  const targetURL = entries[slug];
-  if (targetURL) {
-    res.redirect(targetURL);
+
+  // Überprüfen, ob der Slug in der Datenstruktur vorhanden ist
+  if (entries.hasOwnProperty(slug)) {
+    res.redirect(entries[slug].url);
   } else {
     res.status(404).json({ message: 'Slug not found' });
   }
@@ -44,8 +43,9 @@ app.get('/entries', authenticate, (req, res) => {
 // DELETE /entry/:slug
 app.delete('/entry/:slug', authenticate, (req, res) => {
   const slugToDelete = req.params.slug;
-  if (entries[slugToDelete]) {
+  if (entries.hasOwnProperty(slugToDelete)) {
     delete entries[slugToDelete];
+    saveSlugs(entries); // Speichere die Änderungen in der JSON-Datei
     res.json({ message: 'Entry deleted successfully' });
   } else {
     res.status(404).json({ message: 'Slug not found' });
@@ -55,19 +55,31 @@ app.delete('/entry/:slug', authenticate, (req, res) => {
 // POST /entry
 app.post('/entry', authenticate, (req, res) => {
   const { slug, url } = req.body;
-  
-  // Wenn keine Slug angegeben ist, generiere eine zufällige
-  const newSlug = slug || generateRandomSlug();
 
-  // Speichere den Eintrag
-  entries[newSlug] = url;
-
-  res.json({ message: 'Entry added successfully', slug: newSlug, url });
+  // Überprüfen, ob der Slug bereits existiert
+  if (entries.hasOwnProperty(slug)) {
+    res.status(409).json({ message: 'Slug already exists' });
+  } else {
+    // Speichern Sie den Eintrag
+    entries[slug] = { slug, url };
+    saveSlugs(entries); // Speichere die Änderungen in der JSON-Datei
+    res.json({ message: 'Entry added successfully', slug, url });
+  }
 });
 
-// Generiere eine zufällige Slug
-function generateRandomSlug() {
-  return Math.random().toString(36).substring(7);
+function loadSlugs() {
+  try {
+    const slugsData = fs.readFileSync('slugs.json', 'utf8');
+    return JSON.parse(slugsData);
+  } catch (error) {
+    // Falls die Datei nicht vorhanden ist oder ein Fehler beim Lesen auftritt, starte mit einer leeren Datenstruktur
+    return {};
+  }
+}
+
+function saveSlugs(entries) {
+  const slugsData = JSON.stringify(entries, null, 2);
+  fs.writeFileSync('slugs.json', slugsData);
 }
 
 app.listen(port, () => {
