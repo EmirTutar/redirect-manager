@@ -1,7 +1,6 @@
-// app.js
+// index.js
 const express = require('express');
 const fs = require('fs');
-const authenticate = require('./middleware');
 
 const app = express();
 const port = 3000;
@@ -10,7 +9,20 @@ app.use(express.json());
 
 // Beispiel-Datenstruktur
 let entries = {
-  "rwu": "https://rwu.de",
+  "example-slug": "https://rwu.de",
+};
+
+// Middleware für die Authentifizierung
+const authenticate = (req, res, next) => {
+  const token = req.headers.authorization;
+
+  // Hier sollte Ihre Logik zur Überprüfung des Tokens stehen.
+  // Das folgende ist ein einfaches Beispiel, bitte durch sicherere Methoden ersetzen.
+  if (token === 'IhrBearerToken') {
+    next(); // Fortsetzen mit der nächsten Middleware oder Route
+  } else {
+    res.status(401).json({ message: 'Unauthorized' });
+  }
 };
 
 // GET /:slug
