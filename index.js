@@ -5,13 +5,11 @@ const fs = require('fs');
 const app = express();
 app.use(express.json());
 
-const TOKEN = process.env.BEARER_TOKEN;
+const TOKEN = process.env.BEARER_TOKEN || "secret";
 const dataPath = './redirects.json';
 
 const authenticate = (req, res, next) => {
     const token = req.headers.authorization;
-    console.log('token', token);
-    console.log('TOKEN', TOKEN);
     if (token === TOKEN) {
       next();
     } else {
@@ -31,6 +29,10 @@ const readData = () => {
 const writeData = (data) => {
   fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
 };
+
+app.get('/', (req, res) => {
+  res.send('Willkommen beim URL Redirect Manager!');
+});
 
 app.get('/entries', authenticate, (req, res) => {
   const entries = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
@@ -64,12 +66,14 @@ app.post('/entry', authenticate, (req, res) => {
 
 app.delete('/entry/:slug', authenticate, (req, res) => {
     const slug = req.params.slug;
-    const data = loadRedirectData();
+    const data = readData();
     
     if (data[slug]) {
       delete data[slug];
-      saveRedirectData(data);
-      res.json({ message: 'Entry deleted successfully' });
+      writeData(data);
+      //res.json({ message: 'Entry deleted successfully' });
+      res.status(200).json({ message: 'Entry deleted successfully' });      
+
     } else {
       res.status(404).json({ error: 'Not Found' });
     }
