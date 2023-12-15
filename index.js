@@ -31,7 +31,27 @@ const writeData = (data) => {
 };
 
 app.get('/', (req, res) => {
-  res.send('Willkommen beim URL Redirect Manager!');
+
+    const welcomeMessage = 'Willkommen beim URL Redirect Manager!';
+    const explanations = `
+      <p>(Achtung: Token in Headers Notwendig!) <br><br> Um alle Redirect-Einträge anzuzeigen, verwenden Sie:</p>
+      <code>GET /entries</code>
+      <br><br>
+
+      <p>(Achtung: Token in Headers Notwendig!) <br><br> Um einen Redirect-Eintrag hinzuzufügen, verwenden Sie:</p>
+      <code>POST /entry</code>
+      <br><br>
+
+      <p>(Achtung: Token in Headers Notwendig!) <br><br> Um einen Redirect-Eintrag zu löschen, verwenden Sie:</p>
+      <code>DELETE /entry/:slug</code>
+      <br><br>
+
+      <p>(Kein Token Notwendig!) <br><br> Um auf einen Redirect zuzugreifen, verwenden Sie:</p>
+      <code>GET /:slug</code>
+      <br><br>
+      `;
+  
+    res.send(`${welcomeMessage}<br><br>${explanations}`);
 });
 
 app.get('/entries', authenticate, (req, res) => {
@@ -79,7 +99,6 @@ app.delete('/entry/:slug', authenticate, (req, res) => {
     }
   });
 
-// Starten des Servers
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server läuft auf http://localhost:${PORT}`);
