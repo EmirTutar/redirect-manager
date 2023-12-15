@@ -34,19 +34,19 @@ app.get('/', (req, res) => {
 
     const welcomeMessage = 'Willkommen beim URL Redirect Manager!';
     const explanations = `
-      <p>1. Anzeigen aller Redirect-Einträge (Authentifizierung erforderlich): </p>
+      <p>1. Anzeigen aller Redirect-Einträge (Authentifizierung erforderlich):</p>
       <code>GET /entries</code>
       <br><br>
 
-      <p>2. Hinzufügen eines neuen Redirect-Eintrags (Authentifizierung erforderlich): </p>
+      <p>2. Hinzufügen eines neuen Redirect-Eintrags (Authentifizierung erforderlich):</p>
       <code>POST /entry</code>
       <br><br>
 
-      <p>3. Löschen eines Redirect-Eintrags (Authentifizierung erforderlich): </p>
+      <p>3. Löschen eines Redirect-Eintrags (Authentifizierung erforderlich):</p>
       <code>DELETE /entry/:slug</code>
       <br><br>
 
-      <p>4. Umleitung basierend auf dem Slug: </p>
+      <p>4. Umleitung basierend auf dem Slug:</p>
       <code>GET /:slug</code>
       <br><br>
       `;
