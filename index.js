@@ -78,5 +78,5 @@ app.delete('/entry/:slug', authenticate, (req, res) => {
 // Starten des Servers
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server läuft auf https://localhost:${PORT}`);
+  console.log(`Server läuft auf http://localhost:${PORT}`);
 });
