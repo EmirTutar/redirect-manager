@@ -4,33 +4,59 @@ const fs = require('fs');
 const authenticate = require('./middleware');
 
 const app = express();
-const port = 3000; 
+const port = 3000;
 
-app.use(express.json()); // Verwenden Sie JSON als Middleware für die Verarbeitung von Anfragen
+app.use(express.json());
+
+// Beispiel-Datenstruktur
+let entries = {
+  "rwu": "https://rwu.de",
+};
 
 // GET /:slug
 app.get('/:slug', (req, res) => {
   const slug = req.params.slug;
-  // Hier die Logik zum Auflösen der Slug und zur Umleitung einfügen
-  res.redirect(/* Ziel-URL hier */);
+  const targetURL = entries[slug];
+  if (targetURL) {
+    res.redirect(targetURL);
+  } else {
+    res.status(404).json({ message: 'Slug not found' });
+  }
 });
 
 // GET /entries (Mit Authentication Middleware)
 app.get('/entries', authenticate, (req, res) => {
-  // Hier die Logik zum Lesen der JSON-Datei und Ausgeben der Einträge einfügen
+  res.json(entries);
 });
 
 // DELETE /entry/:slug
 app.delete('/entry/:slug', authenticate, (req, res) => {
   const slugToDelete = req.params.slug;
-  // Hier die Logik zum Entfernen des Eintrags aus der JSON-Datei einfügen
+  if (entries[slugToDelete]) {
+    delete entries[slugToDelete];
+    res.json({ message: 'Entry deleted successfully' });
+  } else {
+    res.status(404).json({ message: 'Slug not found' });
+  }
 });
 
 // POST /entry
 app.post('/entry', authenticate, (req, res) => {
   const { slug, url } = req.body;
-  // Hier die Logik zum Speichern der URL und Slug in der JSON-Datei einfügen
+  
+  // Wenn keine Slug angegeben ist, generiere eine zufällige
+  const newSlug = slug || generateRandomSlug();
+
+  // Speichere den Eintrag
+  entries[newSlug] = url;
+
+  res.json({ message: 'Entry added successfully', slug: newSlug, url });
 });
+
+// Generiere eine zufällige Slug
+function generateRandomSlug() {
+  return Math.random().toString(36).substring(7);
+}
 
 app.listen(port, () => {
   console.log(`Server läuft auf http://localhost:${port}`);
