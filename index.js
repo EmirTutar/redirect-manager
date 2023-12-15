@@ -5,12 +5,13 @@ const fs = require('fs');
 const app = express();
 app.use(express.json());
 
-const TOKEN = process.env.BEARER_TOKEN
+const TOKEN = process.env.BEARER_TOKEN;
 const dataPath = './redirects.json';
 
 const authenticate = (req, res, next) => {
     const token = req.headers.authorization;
-  
+    console.log('token', token);
+    console.log('TOKEN', TOKEN);
     if (token === TOKEN) {
       next();
     } else {
@@ -42,7 +43,10 @@ app.get('/:slug', (req, res) => {
   }
 });
 
-// TODO: get all entries
+app.get('/entries', authenticate, (req, res) => {
+  const entries = JSON.parse(fs.readFileSync('path/to/json/file.json', 'utf-8'));
+  res.json(entries);
+});
 
 app.post('/entry', authenticate, (req, res) => {
   const { slug, url } = req.body;
