@@ -5,12 +5,13 @@ const fs = require('fs');
 const app = express();
 app.use(express.json());
 
+const TOKEN = process.env.BEARER_TOKEN
 const dataPath = './redirects.json';
 
 const authenticate = (req, res, next) => {
     const token = req.headers.authorization;
   
-    if (token === 'IHR_BEARER_TOKEN') {
+    if (token === TOKEN) {
       next();
     } else {
       res.status(401).json({ error: 'Unauthorized' });
@@ -26,12 +27,23 @@ const readData = () => {
   }
 };
 
-// Schreibt die Daten in die JSON-Datei
 const writeData = (data) => {
   fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
 };
 
-// Hinzufügen eines neuen Redirect-Eintrags
+app.get('/:slug', (req, res) => {
+  const { slug } = req.params;
+  const data = readData();
+
+  if (data[slug]) {
+    return res.redirect(data[slug]);
+  } else {
+    return res.status(404).send('Slug nicht gefunden.');
+  }
+});
+
+// TODO: get all entries
+
 app.post('/entry', authenticate, (req, res) => {
   const { slug, url } = req.body;
 
@@ -58,31 +70,6 @@ app.delete('/entry/:slug', authenticate, (req, res) => {
       res.status(404).json({ error: 'Not Found' });
     }
   });
-
-// Umleitung basierend auf dem Slug
-app.get('/:slug', (req, res) => {
-  const { slug } = req.params;
-  const data = readData();
-
-  if (data[slug]) {
-    return res.redirect(data[slug]);
-  } else {
-    return res.status(404).send('Slug nicht gefunden.');
-  }
-});
-
-app.delete('/entry/:slug', authenticate, (req, res) => {
-  const slug = req.params.slug;
-  const data = loadRedirectData();
-  
-  if (data[slug]) {
-    delete data[slug];
-    saveRedirectData(data);
-    res.json({ message: 'Entry deleted successfully' });
-  } else {
-    res.status(404).json({ error: 'Not Found' });
-  }
-});
 
 // Starten des Servers
 const PORT = process.env.PORT || 3000;
