@@ -16,7 +16,9 @@ Willkommen beim URL Redirect Manager! Dieses Tool ermöglicht es Ihnen, benutzer
 
 ## Konfiguration
 
-Stellen Sie sicher, dass Sie die Umgebungsvariable BEARER_TOKEN für die Authentifizierung gesetzt haben. Wenn nicht angegeben, wird der Standardwert "secret" verwendet.
+Stellen Sie sicher, dass Sie die Umgebungsvariable BEARER_TOKEN für die Authentifizierung gesetzt haben. Wenn nicht angegeben, können Sie den Standardwert "secret" verwenden. Der Wert für die Authentifizierung wir in Headers übergen.
+
+Key: Authorization || Value: secret
 
 
 ## Verwendung
