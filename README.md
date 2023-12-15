@@ -38,7 +38,7 @@ GET http://localhost:3000/entries
 ```
 
 ### 3. Hinzufügen eines neuen Redirect-Eintrags (Authentifizierung erforderlich)
-
+z.B. in postman unter Body/raw möglich hier ein Beispiel:  { "slug": "yt", "url" : "https://youtube.com/" } 
 ```bash
 POST http://localhost:3000/entry
 ```
