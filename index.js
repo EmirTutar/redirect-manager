@@ -32,6 +32,11 @@ const writeData = (data) => {
   fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
 };
 
+app.get('/entries', authenticate, (req, res) => {
+  const entries = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+  res.json(entries);
+});
+
 app.get('/:slug', (req, res) => {
   const { slug } = req.params;
   const data = readData();
@@ -41,11 +46,6 @@ app.get('/:slug', (req, res) => {
   } else {
     return res.status(404).send('Slug nicht gefunden.');
   }
-});
-
-app.get('/entries', authenticate, (req, res) => {
-  const entries = JSON.parse(fs.readFileSync('path/to/json/file.json', 'utf-8'));
-  res.json(entries);
 });
 
 app.post('/entry', authenticate, (req, res) => {
