@@ -1,0 +1,38 @@
+# .gitignore
+
+# Ignore node_modules directory
+node_modules/
+
+# Ignore log files and other generated files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Ignore environment variables file
+.env
+
+# Ignore dependency directories
+# You might want to uncomment these lines if you are using Yarn
+# pnp.js
+.yarn/*
+
+# Ignore local configuration
+.vscode/
+
+# Ignore built files
+dist/
+build/
+out/
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore test coverage results
+coverage/
