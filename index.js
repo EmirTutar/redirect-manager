@@ -34,19 +34,19 @@ app.get('/', (req, res) => {
 
     const welcomeMessage = 'Willkommen beim URL Redirect Manager!';
     const explanations = `
-      <p>(Achtung: Token in Headers Notwendig!) <br><br> Um alle Redirect-Einträge anzuzeigen, verwenden Sie:</p>
+      <p>1. Anzeigen aller Redirect-Einträge (Authentifizierung erforderlich): </p>
       <code>GET /entries</code>
       <br><br>
 
-      <p>(Achtung: Token in Headers Notwendig!) <br><br> Um einen Redirect-Eintrag hinzuzufügen, verwenden Sie:</p>
+      <p>2. Hinzufügen eines neuen Redirect-Eintrags (Authentifizierung erforderlich): </p>
       <code>POST /entry</code>
       <br><br>
 
-      <p>(Achtung: Token in Headers Notwendig!) <br><br> Um einen Redirect-Eintrag zu löschen, verwenden Sie:</p>
+      <p>3. Löschen eines Redirect-Eintrags (Authentifizierung erforderlich): </p>
       <code>DELETE /entry/:slug</code>
       <br><br>
 
-      <p>(Kein Token Notwendig!) <br><br> Um auf einen Redirect zuzugreifen, verwenden Sie:</p>
+      <p>4. Umleitung basierend auf dem Slug: </p>
       <code>GET /:slug</code>
       <br><br>
       `;
@@ -91,7 +91,6 @@ app.delete('/entry/:slug', authenticate, (req, res) => {
     if (data[slug]) {
       delete data[slug];
       writeData(data);
-      //res.json({ message: 'Entry deleted successfully' });
       res.status(200).json({ message: 'Entry deleted successfully' });      
 
     } else {
