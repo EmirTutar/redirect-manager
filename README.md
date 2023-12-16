@@ -68,6 +68,6 @@ GET http://localhost:3000/your_slug
 ### 6. Docker Befehle (wurde mit Ubuntu durchgeführt): 
 sudo docker build -t redirect-manager .
 
-sudo docker run -d --name redirect -p 80:3000 -v /docker/redirectData.json:/usr/src/app/data.json -e PORT=3000 -e BEARER_TOKEN=secret redirect-manager
+sudo docker run -d --name redirect -p 80:3000 -v etc/docker/redirectData.json:/usr/src/app/redirects.json -e PORT=3000 -e BEARER_TOKEN=secret redirect-manager
 
-Dannach unter localhost im Browser oder Postman erreichbar.
+Dannach unter localhost im Browser oder Postman erreichbar. Achtung: Zu beginn sollten man ein entry posten, weil sonst ein error kommt, weil die Datei noch leer ist.
