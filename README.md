@@ -65,8 +65,9 @@ Besuchen Sie einfach die gewünschte URL:
 GET http://localhost:3000/your_slug
 ```
 
-### 6. Docker Befehl: 
+### 6. Docker Befehle (wurde mit Ubuntu durchgeführt): 
+sudo docker build -t redirect-manager .
 
-docker build -t redirect-manager .
+sudo docker run -d --name redirect -p 80:3000 -v /docker/redirectData.json:/usr/src/app/data.json -e PORT=3000 -e BEARER_TOKEN=secret redirect-manager
 
-docker run -d --name redirect -p 80:3000 -v /docker/redirectData.json:/usr/src/app/data.json -e PORT=3000 -e BEARER_TOKEN=secret redirect-manager
+Dannach unter localhost erreichbar.
