@@ -66,8 +66,21 @@ GET http://localhost:3000/your_slug
 ```
 
 ### 6. Docker Befehle (wurde mit Ubuntu durchgeführt): 
+
+Die Daten der slugs werden nach einem Post, alle unter redirects.json gespeichert in Docker und local unter redirectData.json.
+
+Dannach unter localhost im Browser oder Postman erreichbar (nicht mehr unter localhost:3000 wie vorher!).
+Achtung: Zu beginn sollten man ein entry posten, weil sonst ein error kommt, weil die Datei noch leer ist!
+
+```bash
 sudo docker build -t redirect-manager .
 
 sudo docker run -d --name redirect -p 80:3000 -v etc/docker/redirectData.json:/usr/src/app/redirects.json -e PORT=3000 -e BEARER_TOKEN=secret redirect-manager
+```
 
-Dannach unter localhost im Browser oder Postman erreichbar. Achtung: Zu beginn sollten man ein entry posten, weil sonst ein error kommt, weil die Datei noch leer ist.
+.
+.
+.
+.
+
+Ende
