@@ -66,4 +66,7 @@ GET http://localhost:3000/your_slug
 ```
 
 ### 6. Docker Befehl: 
+
+docker build -t redirect-manager .
+
 docker run -d --name redirect -p 80:3000 -v /docker/redirectData.json:/usr/src/app/data.json -e PORT=3000 -e BEARER_TOKEN=secret redirect-manager
